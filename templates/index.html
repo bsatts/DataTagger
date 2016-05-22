@@ -11,8 +11,9 @@
     </head>
     <body>
         <div class="container">
+            <div class="row row-eq-height">
             <h2> Dataset Tagger </h2>
-            <div class = "jumbotron">
+            <div class = "jumbotron col-md-6">
             {% if entry %}
             <div id="post">
                 <p>
@@ -21,8 +22,16 @@
             </div>
             <form role="form" method="POST" action = "/">
                 <div class="form-group">
-                    <input type="text" name="rating" class="form-control" id="rating-box"
-                    placeholder="Enter text sentiment" style="max-width: 300px;" autofocus required>
+                    <label class="radio-inline"><input type="radio" name="rating"
+                    value = "1" required>1</label>
+                    <label class="radio-inline"><input type="radio" name="rating"
+                    value = "2">2</label>
+                    <label class="radio-inline"><input type="radio" name="rating"
+                    value = "3">3</label>
+                    <label class="radio-inline"><input type="radio" name="rating"
+                    value = "4">4</label>
+                    <label class="radio-inline"><input type="radio" name="rating"
+                    value = "5">5</label>
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
@@ -42,8 +51,21 @@
             {% endfor %}
         </div>
         {% if not start %}
-        <h2>Instructions</h2>
+        <div class = "col-md-6">
+                <div class = "pre-scrollable">
+            {% for c in context %}
+                <ul>
+                    <li>
+                        {{ c }}
+                    </li>
+                </ul>
+             {% endfor %}
+        </div>
+        </div>
+    </div>
+      <div class="row">
         <div class = "panel panel-default">
+            <div class="panel-heading"><h2>Instructions</h2></div>
             <div class="panel-body">
                 Rate the above text based on what you think it's sentiment value is.
                 <br />
@@ -53,5 +75,6 @@
         </div>
         {% endif %}
         </div>
+    </div>
     </body>
 </html>
