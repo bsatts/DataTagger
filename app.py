@@ -71,7 +71,6 @@ def index():
             f = request.form
             if ("l_rating" not in f) and ("p_rating" not in f):
                 #Display entry is the same
-                print isComplete
                 if (not isComplete):
                     #Get the chunks for the line
                     untagged_chunks = Chunk.query.filter_by(line_id=untagged_line.id).\
@@ -149,19 +148,15 @@ def index():
                             isComplete = True
                             entry = None
                         else:
-                            print next_line.text
                             entry = next_line.text
                             #Fill the chunks
                             next_chunks = Chunk.query.filter_by(line_id=next_line.id).\
                                 order_by(Chunk.id).all()
                             if next_chunks:
-                                print "Here and back again"
                                 for n_chunk in next_chunks:
                                     chunks.append(n_chunk.text)
-                            print "FInally some action"
                     except Exception as e:
-                        print traceback.format_exc()
-                        sys.exit(1)
+                        raise ValueError("Ooops")
         except ValueError as e:
             errors.append(e)
     return render_template('index.html', errors=errors, entry=entry,
