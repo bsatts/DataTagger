@@ -10,34 +10,11 @@
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row row-eq-height">
             <h2> Dataset Tagger </h2>
-            <div class = "jumbotron col-md-6">
-            {% if entry %}
-            <div id="post">
-                <p>
-                    {{ entry }}
-                </p>
-            </div>
-            <form role="form" method="POST" action = "/">
-                <div class="form-group">
-                    <label class="radio-inline"><input type="radio" name="rating"
-                    value = "1" required>1</label>
-                    <label class="radio-inline"><input type="radio" name="rating"
-                    value = "2">2</label>
-                    <label class="radio-inline"><input type="radio" name="rating"
-                    value = "3">3</label>
-                    <label class="radio-inline"><input type="radio" name="rating"
-                    value = "4">4</label>
-                    <label class="radio-inline"><input type="radio" name="rating"
-                    value = "5">5</label>
-                </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-            <br />
-            {% endif %}
             {% if start %}
+            <div class = "jumbotron col-md-4">
                 <p>
                     Simple framework to facilitate easy labelling of datasets
                 </p>
@@ -45,35 +22,122 @@
                     <button type="submit" class="btn btn-default">Start</button>
                 </form>
                 <br />
-            {% endif %}
-            {% for error in errors %}
-                <h4>{{ error }}</h4>
-            {% endfor %}
-        </div>
-        {% if not start %}
-        <div class = "col-md-6">
-                <div class = "pre-scrollable">
-            {% for c in context %}
-                <ul>
-                    <li>
-                        {{ c }}
-                    </li>
-                </ul>
-             {% endfor %}
-        </div>
-        </div>
-    </div>
-      <div class="row">
-        <div class = "panel panel-default">
-            <div class="panel-heading"><h2>Instructions</h2></div>
-            <div class="panel-body">
-                Rate the above text based on what you think it's sentiment value is.
-                <br />
-                Rating goes from 1 to 5 with 1 being highly negative, 3 neutral
-                and 5 being highly positive.
             </div>
-        </div>
-        {% endif %}
+            {% endif %}
+            {% if not start %}
+                {% if entry %}
+                    <div class = "jumbotron col-md-4">
+                    <div id="post">
+                        <p>
+                            {{ entry }}
+                        </p>
+                    </div>
+                    <form role="form" method="POST" action = "/">
+                        <div class="form-group">
+                            <label class="radio-inline"><input type="radio" name="l_rating"
+                            value = "1" required>1</label>
+                            <label class="radio-inline"><input type="radio" name="l_rating"
+                            value = "2">2</label>
+                            <label class="radio-inline"><input type="radio" name="l_rating"
+                            value = "3">3</label>
+                            <label class="radio-inline"><input type="radio" name="l_rating"
+                            value = "4">4</label>
+                            <label class="radio-inline"><input type="radio" name="l_rating"
+                            value = "5">5</label>
+                        </div>
+                        {% if chunks %}
+                        <br />
+                        <h4>
+                            Noun phrases of the line (optional)
+                        </h4>
+                            {% for chunk in chunks %}
+                                <p>
+                                    {{ chunk }}
+                                </p>
+                                <div class="form-group">
+                                    <label class="radio-inline"><input type="radio" name="c_rating{{ loop.index0 }}"
+                                    value = "1">1</label>
+                                    <label class="radio-inline"><input type="radio" name="c_rating{{ loop.index0 }}"
+                                    value = "2">2</label>
+                                    <label class="radio-inline"><input type="radio" name="c_rating{{ loop.index0 }}"
+                                    value = "3">3</label>
+                                    <label class="radio-inline"><input type="radio" name="c_rating{{ loop.index0 }}"
+                                    value = "4">4</label>
+                                    <label class="radio-inline"><input type="radio" name="c_rating{{ loop.index0 }}"
+                                    value = "5">5</label>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <br />
+                    {% for error in errors %}
+                        <h4>{{ error }}</h4>
+                    {% endfor %}
+                    </div>
+                    <div class = "col-md-4">
+                            <div class = "pre-scrollable">
+                        {{ full_post }} <br />
+                    </div>
+                    </div>
+                {% endif %}
+
+                {% if not entry %}
+                    <div class = "jumbotron col-md-6">
+                        <div class = "pre-scrollable">
+                        <div id="post">
+                            <p>
+                                {{ full_post }}
+                            </p>
+                        </div>
+                        </div>
+                    <form role="form" method="POST" action = "/">
+                        <div class="form-group">
+                            <label class="radio-inline"><input type="radio" name="p_rating"
+                            value = "1" required>1</label>
+                            <label class="radio-inline"><input type="radio" name="p_rating"
+                            value = "2">2</label>
+                            <label class="radio-inline"><input type="radio" name="p_rating"
+                            value = "3">3</label>
+                            <label class="radio-inline"><input type="radio" name="p_rating"
+                            value = "4">4</label>
+                            <label class="radio-inline"><input type="radio" name="p_rating"
+                            value = "5">5</label>
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    </div>
+                {% endif %}
+            <div class = "col-md-4">
+                {% if context %}
+                <div class = "pre-scrollable">
+                <ul>
+                    {% for con in context %}
+                        <li>
+                            {{ con }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                </div>
+                {% endif %}
+            </div>
+            </div>
+              <div class="row">
+                <div class = "panel panel-default">
+                    <div class="panel-heading"><h2>Instructions</h2></div>
+                    <div class="panel-body">
+                        Rate the above text based on what you think it's sentiment value is.
+                        <br />
+                        Rating goes from 1 to 5 with 1 being highly negative, 3 neutral
+                        and 5 being highly positive. <br />
+                        The first column is the entry to be rated and is either
+                         a single line from a post/comment or the post/comment itself. If it's just a line
+                         then the next column is the entire post provided for context. <br />
+                         There is also a third column which is the context of the current
+                         post/comment that it is the message chain to which the current comment is the reply for.
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
     </body>
