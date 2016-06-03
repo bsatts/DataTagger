@@ -131,7 +131,7 @@ def index():
                     untagged_line.rating = int(l_rating)
 
                     #Get the category if it exists
-                    if ['category'] in f:
+                    if 'category' in f:
                         cat = f['category']
                         #Update the line category
                         untagged_line.category = cat
