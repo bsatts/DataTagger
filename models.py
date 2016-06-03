@@ -14,10 +14,18 @@ class Line(db.Model):
     text = db.Column(db.String, index  = True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     chunks = db.relationship('Chunk')
+    phrases = db.relationship('Phrase')
     rating = db.Column(db.Integer, index=True)
+    category = db.Column(db.String, index = True)
 
 class Chunk(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     text = db.Column(db.String, index = True)
     line_id = db.Column(db.Integer, db.ForeignKey('line.id'))
     rating = db.Column(db.Integer, index = True)
+
+class Phrase(db.Model):
+    id = db.Column(db.Integer, primary_key= True)
+    text = db.Column(db.String, index=True)
+    line_id = db.Column(db.Integer, db.ForeignKey('line.id'))
+    rating = db.Column

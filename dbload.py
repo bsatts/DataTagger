@@ -16,7 +16,7 @@ def main():
     #Iterate through the folder and identify all the files
     onlyfiles = [f for f in listdir(input_folder) if isfile(join(input_folder, f))]
     onlyfiles = filter(lambda x: x.endswith(".json"), onlyfiles)
-    onlyfiles.sort()
+    onlyfiles.sort(reverse=True)
 
     #Parse each file, scrape reddit contents and add to db
     post_id = 0

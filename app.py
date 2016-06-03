@@ -9,7 +9,7 @@ app.config.from_object('config')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from models import Post, Line, Chunk
+from models import *
 
 #Using global variables to keep track of state
 isComplete = False
@@ -19,7 +19,7 @@ def index():
     errors = []
     entry = None
     context = []
-    chunks = []
+    phrases = []
     full_post = ""
     start = True
     if request.method == "POST":
@@ -72,13 +72,13 @@ def index():
             if ("l_rating" not in f) and ("p_rating" not in f):
                 #Display entry is the same
                 if (not isComplete):
-                    #Get the chunks for the line
-                    untagged_chunks = Chunk.query.filter_by(line_id=untagged_line.id).\
-                        order_by(Chunk.id).all()
+                    #Get the phrases for the line
+                    untagged_phrases = Phrase.query.filter_by(line_id=untagged_line.id).\
+                        order_by(Phrase.id).all()
 
-                    if untagged_chunks:
-                        for u_chunk in untagged_chunks:
-                            chunks.append(u_chunk.text)
+                    if untagged_phrases:
+                        for u_phrase in untagged_phrases:
+                            phrases.append(u_phrase.text)
             else:
                 if (isComplete):
                     #Get the post rating
@@ -87,7 +87,7 @@ def index():
                     untagged_post.rating = int(p_rating)
                     db.session.commit()
 
-                    #Get the next post and it's lines and chunks
+                    #Get the next post and it's lines and phrases
                     untagged_post = Post.query.filter(Post.rating == None).\
                     order_by(Post.id).first()
                     if (untagged_post is None):
@@ -117,25 +117,31 @@ def index():
                         filter(Line.rating == None).order_by(Line.id).first()
                     entry = untagged_line.text
 
-                    untagged_chunks = Chunk.query.filter_by(line_id = untagged_line.id).\
-                        order_by(Chunk.id).all()
+                    untagged_phrases = Phrase.query.filter_by(line_id = untagged_line.id).\
+                        order_by(Phrase.id).all()
 
-                    if untagged_chunks:
-                        for u_chunk in untagged_chunks:
-                            chunks.append(u_chunk.text)
+                    if untagged_phrases:
+                        for u_phrase in untagged_phrases:
+                            phrases.append(u_phrase.text)
                 else:
                     l_rating = f['l_rating']
-                    untagged_chunks = Chunk.query.filter_by(line_id = untagged_line.id).\
-                        order_by(Chunk.id).all()
+                    untagged_phrases = Phrase.query.filter_by(line_id = untagged_line.id).\
+                        order_by(Phrase.id).all()
                     #Update the line rating
                     untagged_line.rating = int(l_rating)
 
-                    #Update chunk ratings if they exist
-                    if untagged_chunks:
-                        for i, ut_chunk in enumerate(untagged_chunks):
+                    #Get the category if it exists
+                    if ['category'] in f:
+                        cat = f['category']
+                        #Update the line category
+                        untagged_line.category = cat
+
+                    #Update phrase ratings if they exist
+                    if untagged_phrases:
+                        for i, ut_phrase in enumerate(untagged_phrases):
                             if ('c_rating' + str(i)) in f:
-                                chunk_rating = f['c_rating' + str(i)]
-                                ut_chunk.rating = int(chunk_rating)
+                                phrase_rating = f['c_rating' + str(i)]
+                                ut_phrase.rating = int(phrase_rating)
 
                     db.session.commit()
 
@@ -149,18 +155,18 @@ def index():
                             entry = None
                         else:
                             entry = next_line.text
-                            #Fill the chunks
-                            next_chunks = Chunk.query.filter_by(line_id=next_line.id).\
-                                order_by(Chunk.id).all()
-                            if next_chunks:
-                                for n_chunk in next_chunks:
-                                    chunks.append(n_chunk.text)
+                            #Fill the phrases
+                            next_phrases = Phrase.query.filter_by(line_id=next_line.id).\
+                                order_by(Phrase.id).all()
+                            if next_phrases:
+                                for n_phrase in next_phrases:
+                                    phrases.append(n_phrase.text)
                     except Exception as e:
                         raise ValueError("Ooops")
         except ValueError as e:
             errors.append(e)
     return render_template('index.html', errors=errors, entry=entry,
-            start=start, context = context, chunks = chunks,
+            start=start, context = context, phrases = phrases,
              full_post = full_post)
 
 if __name__ == '__main__':

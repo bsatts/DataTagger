@@ -27,11 +27,13 @@
             {% if not start %}
                 {% if entry %}
                     <div class = "jumbotron col-md-4">
+                    <div class = "pre-scrollable">
                     <div id="post">
                         <p>
                             {{ entry }}
                         </p>
                     </div>
+                </div>
                     <form role="form" method="POST" action = "/">
                         <div class="form-group">
                             <label class="radio-inline"><input type="radio" name="l_rating"
@@ -45,14 +47,32 @@
                             <label class="radio-inline"><input type="radio" name="l_rating"
                             value = "5">5</label>
                         </div>
-                        {% if chunks %}
                         <br />
                         <h4>
-                            Noun phrases of the line (optional)
+                            Sentiment category (optional)
                         </h4>
-                            {% for chunk in chunks %}
+                        <div class = "form-group">
+                            <label class="radio"><input type="radio" name = "category"
+                                value = "depression">Depression</label>
+                            <label class="radio"><input type="radio" name = "category"
+                                value = "anger">Anger</label>
+                            <label class="radio"><input type="radio" name = "category"
+                                value = "empathetic">Empathetic</label>
+                            <label class="radio"><input type="radio" name = "category"
+                                value = "encouragement">Encouragement</label>
+                            <label class="radio"><input type="radio" name = "category"
+                                value = "happiness">Happiness</label>
+                            <label class="radio"><input type="radio" name = "category"
+                                value = "hurtful">Hurtful</label>
+                        </div>
+                        {% if phrases %}
+                        <br />
+                        <h4>
+                            Phrases of the line (optional)
+                        </h4>
+                            {% for phrase in phrases %}
                                 <p>
-                                    {{ chunk }}
+                                    {{ phrase }}
                                 </p>
                                 <div class="form-group">
                                     <label class="radio-inline"><input type="radio" name="c_rating{{ loop.index0 }}"
