@@ -2,3 +2,5 @@
 *.pyo
 *.db
 *.db-journal
+*.ini
+alembic
